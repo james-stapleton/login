@@ -1,9 +1,9 @@
 router = require('express').Router();
-const { User } = require('../../models');
+const { Users, Cocktails, UserCocktails } = require('../../models');
 
 router.post('/', async (req, res) => {
   try {
-    const userData = await User.create(req.body);
+    const userData = await Users.create(req.body);
 
     req.session.save(() => {
       req.session.user_id = userData.id;
@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
+    const userData = await Users.findOne({ where: { email: req.body.email } });
 
     if (!userData) {
       res
@@ -57,5 +57,54 @@ router.post('/logout', (req, res) => {
     res.status(404).end();
   }
 });
+
+
+//! -----------------------------------------------------------------------Old Routes
+
+
+// User get methods
+router.get('/', async (req,res) => {
+    try {
+        const userData = await Users.findAll({include: Cocktails, through: UserCocktails}, {where: saved = true} );
+        res.status(200).json(userData);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+router.get('/:id', async (req,res) => {
+    try {
+        const userData = await Users.findByPk( req.params.id, {include: Cocktails, through: UserCocktails }, {where: saved = true} );
+        res.status(200).json(userData);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+//User update method
+router.put('/:id', async (req,res) => {
+    try {
+    const updateData = await Users.update(req.body, {where: {id: req.params.id} }); 
+    // res.send(200).json(updateData);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+//User delete method
+router.delete('/:id', async (req, res) => {
+    try {
+      const userData = await Users.destroy({
+        where: { id: req.params.id }
+      });
+      if (!userData) {
+        res.status(404).json({ message: 'No user found with this id' });
+        return;
+      }
+      res.status(200).json(userData);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 
 module.exports = router;

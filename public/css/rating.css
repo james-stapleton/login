@@ -1,0 +1,42 @@
+* {
+    color: rgb(252, 215, 4);
+    text-shadow:/*  1px 0 black,
+    0 1px black,
+    -1px 0 black,
+    0 -1px black; */
+
+    0.05em 0 black,
+        0 0.05em black,
+        -0.05em 0 black,
+        0 -0.05em black,
+        -0.05em -0.05em black,
+        -0.05em 0.05em black,
+        0.05em -0.05em black,
+        0.05em 0.05em black;
+}
+
+.stars a {
+    opacity: 50%;
+    cursor: pointer;
+    padding: 3px;
+}
+
+.stars:hover a {
+    opacity: 100%;
+}
+
+.stars a:hover {
+    opacity: 100%;
+}
+
+.stars a:hover ~ a {
+    opacity: 50%;
+}
+
+.stars a.active {
+    opacity: 100%;
+}
+
+.stars.disabled {
+    pointer-events: none;
+}

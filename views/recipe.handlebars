@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe</title>
+</head>
+<body>
+
+     <div id="card1" class="container">
+    <div class="row row-cols-1 row-cols-md-3">
+        <div class="col mb-4">
+          <div class="card h-100" style="max-width: 24rem;">
+            <img src="/static/{{this.image}}" class="card-img-top" alt="{{this.image}}">
+            <div class="card-body">
+              <h5 id="cocktail-name" class="card-title text-primary">{{this.name}}</h5>
+              <p>{{this.ingredients}}</p>
+              <p>{{this.instructions}}</p>
+              <p>Rating: {{this.rating}}</p>
+              <p>Views: {{this.views}}</p>
+              <p id="grab-id">{{this.id}}</p>
+            </div>
+          </div>
+        </div>
+  </div>
+  </div>
+
+ 
+  <div class="stars">
+    <a>⭐</a>
+    <a>⭐</a>
+    <a>⭐</a>
+    <a>⭐</a>
+    <a>⭐</a>
+</div>
+
+
+<button id="save">Save Recipe</button>
+
+<script src="/js/recipe.js"></script>
+  
+</body>
+</html>
