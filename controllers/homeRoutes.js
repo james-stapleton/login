@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../models');
+const { Users, Cocktails } = require('../models');
 const withAuth = require('../utils/auth');
 
 router.get('/', async (req, res) => {
@@ -17,35 +17,12 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/project/:id', async (req, res) => {
-  try {
-    const projectData = await Project.findByPk(req.params.id, {
-      include: [
-        {
-          model: User,
-          attributes: ['name'],
-        },
-      ],
-    });
-
-    const project = projectData.get({ plain: true });
-
-    res.render('project', {
-      ...project,
-      logged_in: req.session.logged_in
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
 router.get('/login', (req, res) => {
   // If the user is already logged in, redirect the request to another route
   if (req.session.logged_in) {
     res.redirect('/');
     return;
   }
-
   res.render('login');
 });
 
@@ -54,19 +31,26 @@ router.get('/login', (req, res) => {
 router.get('/recipe/:name', async (req,res) => {
 
     try {
-        const cocktailData = await Cocktails.findOne( {where: {name: req.params.name}});
-        const cocktailObject = {
-            cocktail: {
-                id: cocktailData.id,
-                name: cocktailData.name,
-                ingredients: cocktailData.ingredients,
-                instructions: cocktailData.instructions,
-                rating: cocktailData.rating,
-                views: cocktailData.views,
-                image: cocktailData.image
-            }
-        }
-        res.render('recipe', cocktailObject.cocktail);        
+      if (!req.session.logged_in) {
+        res.redirect('/login');
+        return;
+      }
+      const cocktailData = await Cocktails.findOne( {where: {name: req.params.name}});
+      cocktail = {
+        id: cocktailData.id,
+        name: cocktailData.name,
+        ingredients: cocktailData.ingredients,
+        instructions: cocktailData.instructions,
+        image: cocktailData.image,
+        views: cocktailData.views,
+      }
+        res.render('recipe', {id: cocktailData.id,
+          name: cocktailData.name,
+          ingredients: cocktailData.ingredients,
+          instructions: cocktailData.instructions,
+          image: cocktailData.image,
+          views: cocktailData.views, 
+          user_id: req.session.user_id});        
     } catch (err) {
         res.status(500).json(err);
     }
@@ -90,7 +74,11 @@ router.get('/viewed', async (req, res) => {
 
 router.get('/saved', async (req, res) => {
     try {
-        res.render('saved-drinks');
+      if (!req.session.logged_in) {
+        res.redirect('/login');
+        return;
+      }
+        res.render('saved-drinks', {user_id: req.session.user_id});
     } catch (err) {
         res.json(err);
     }

@@ -1,4 +1,7 @@
-drinkUrl = `/api/users/1`;
+const userID = document.querySelector("div[data-attribute]").id;
+console.log("User id: ", userID)
+
+drinkUrl = `/api/users/${userID}`;
 
 function displayRatings(drinkUrl) {
     fetch(drinkUrl)

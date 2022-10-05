@@ -14,16 +14,11 @@ fetch(`/api/viewed/${cocktail}`, postOptions)
   console.log(`${cocktail} views incremented`);
 });
 
-//!--------------------------------------------------Get session ID. Use it for save and rate
-
-const userID = document.querySelector("div[data-attribute]").id;
-console.log("User id: ", userID)
-
 // Save button
 
 const saveButton = document.querySelector("#save");
 saveButton.addEventListener("click", () => {
-const userID = document.querySelector("div[data-attribute]").id;
+const userID = localStorage.getItem("user_id");
 const cocktailID = document.querySelector("#grab-id").textContent;
 console.log(cocktailID);
   const body = {
@@ -79,8 +74,7 @@ function getStar() {
 function submitRating(starIndex) {
   console.log(starIndex);
 
-  const userID = document.querySelector("div[data-attribute]").id;
-  console.log("User id for rating: ", userID);
+  const userID = localStorage.getItem("user_id");
   const cocktailID = document.querySelector("#grab-id").textContent;
     const body = {
       userId: userID,
@@ -101,4 +95,3 @@ function submitRating(starIndex) {
   });
   
 }
-
